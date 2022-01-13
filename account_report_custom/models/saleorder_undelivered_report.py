@@ -177,6 +177,7 @@ class ReportSaleOrderUndelivered(models.Model):
         #     if col.get('no_format') == 0:
         #         col['name'] = ''
         # res['columns'][-1]['name'] = ''
+        #
 
     @api.model
     def _get_options_domain(self, options):
