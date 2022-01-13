@@ -53,7 +53,7 @@ class ReportSaleOrderUndelivered(models.Model):
 
     @api.model
     def _get_sql(self):
-        options = self.env.context['report_options']
+        # options = self.env.context['report_options']
         query = ("""
             SELECT                
                 so.id AS move_id, 
