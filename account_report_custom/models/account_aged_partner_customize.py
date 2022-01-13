@@ -121,8 +121,8 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
             self._header_column(),
             self._field_column('report_date'),
 
-            self._field_column('account_name', name=_("Account"), ellipsis=True),
-            self._field_column('order_no', name=_("Order No."), ellipsis=True),
+            self._field_column('account_name', name=_("Account")),
+            self._field_column('order_no', name=_("Order No.")),
 
             self._field_column('expected_pay_date'),
             self._field_column('period0', name=_("As of: %s", format_date(self.env, options['date']['date_to']))),

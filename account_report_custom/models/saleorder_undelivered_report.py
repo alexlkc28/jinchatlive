@@ -136,8 +136,8 @@ class ReportSaleOrderUndelivered(models.Model):
     def _get_column_details(self, options):
         columns = [
             self._header_column(),
-            self._field_column('partner_name', name=_("Customer"), ellipsis=True),
-            self._field_column('english_name', name=_("Customer English Name"), ellipsis=True),
+            self._field_column('partner_name', name=_("Customer")),
+            self._field_column('english_name', name=_("Customer English Name")),
             self._field_column('product_code', name=_("Product Code")),
             self._field_column('quantity', name=_("Quantity")),
             self._field_column('shipped_quantity', name=_("Shipped Quantity")),
@@ -177,7 +177,6 @@ class ReportSaleOrderUndelivered(models.Model):
         #     if col.get('no_format') == 0:
         #         col['name'] = ''
         # res['columns'][-1]['name'] = ''
-        #
 
     @api.model
     def _get_options_domain(self, options):
