@@ -224,6 +224,7 @@ class ReportAccountAgedPayableCustomize(models.Model):
                         SELECT cr_c1.currency_id, cr_c1.rate
                         FROM res_currency_rate cr_c1
                         WHERE cr_c1.currency_id = account_move_line.currency_id
+                        AND cr_c1.name <= %(date)s
                         ORDER BY cr_c1.name DESC 
                         LIMIT 1
                     ) curr_rate ON account_move_line.currency_id = curr_rate.currency_id
