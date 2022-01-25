@@ -175,7 +175,7 @@ class ReportAccountAgedPayableCustomize(models.Model):
     def _get_sql(self):
         options = self.env.context['report_options']
         query = ("""
-                    SELECT
+                        SELECT
                         {move_line_fields},
                         account_move_line.amount_currency as amount_currency,
                         account_move_line.partner_id AS partner_id,
@@ -188,16 +188,16 @@ class ReportAccountAgedPayableCustomize(models.Model):
                         move.move_type AS move_type,
                         move.name AS move_name,
                         move.ref AS move_ref,
-
-                        COALESCE(SUM(part_credit.amount_currency), 0) AS amount_paid,
-                        (account_move_line.amount_currency + COALESCE(SUM(part_credit.amount_currency), 0)) AS amount_residual,
-
+                        
+                        COALESCE(SUM(part_debit.amount_currency), 0) AS amount_paid,
+                        (account_move_line.amount_currency - COALESCE(SUM(part_debit.amount_currency), 0)) AS amount_residual,
+                        
                         COALESCE(SUM(part_debit.amount), 0) AS part_debit_amount,
                         COALESCE(SUM(part_credit.amount), 0) AS part_credit_amount,
-
+                        
                         COALESCE(so.name, move.ref) AS order_no,
                         curr_rate.rate AS currency_rate,
-
+                        
                         account.code || ' ' || account.name AS account_name,
                         account.code AS account_code,""" + ','.join([("""
                         CASE WHEN period_table.period_index = {i}
@@ -234,7 +234,7 @@ class ReportAccountAgedPayableCustomize(models.Model):
                         WHERE part.max_date <= %(date)s
                     ) part_debit ON part_debit.debit_move_id = account_move_line.id
                     LEFT JOIN LATERAL (
-                        SELECT part.amount, part.credit_move_id, part.debit_amount_currency AS amount_currency
+                        SELECT part.amount, part.credit_move_id
                         FROM account_partial_reconcile part
                         WHERE part.max_date <= %(date)s
                     ) part_credit ON part_credit.credit_move_id = account_move_line.id
