@@ -252,7 +252,7 @@ class ReportAccountAgedPayableCustomize(models.Model):
                              period_table.period_index, currency_table.rate, currency_table.precision, 
                              so.id,
                              curr_rate.rate
-                    HAVING ROUND(account_move_line.amount_currency + COALESCE(SUM(part_credit.amount_currency), 0)) < 0
+                    HAVING ROUND(account_move_line.amount_currency + COALESCE(SUM(part_credit.amount_currency), 0)) != 0
                 """).format(
             move_line_fields=self._get_move_line_fields('account_move_line'),
             currency_table=self.env['res.currency']._get_query_currency_table(options),
