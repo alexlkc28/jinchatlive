@@ -20,7 +20,6 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
     balance = fields.Monetary(currency_field='currency_id')
     part_debit_amount = fields.Monetary(currency_field='currency_id')
     part_credit_amount = fields.Monetary(currency_field='currency_id')
-
     amount_check = fields.Float()
 
     @api.model
@@ -125,6 +124,11 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
             self._header_column(),
             self._field_column('report_date'),
 
+            self._field_column('balance', name=_("balance")),
+            self._field_column('part_debit_amount', name=_("part_debit_amount")),
+            self._field_column('part_credit_amount', name=_("part_credit_amount")),
+            self._field_column('amount_check', name=_("amount_check")),
+
             self._field_column('account_name', name=_("Account")),
             self._field_column('order_no', name=_("Order No.")),
 
@@ -135,7 +139,6 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
             self._field_column('period3', sortable=True),
             self._field_column('period4', sortable=True),
             self._field_column('period5', sortable=True),
-            self._field_column('amount_check', name=_("Check")),
             self._custom_column(  # Avoid doing twice the sub-select in the view
                 name=_('Total'),
                 classes=['number'],
@@ -265,6 +268,7 @@ class ReportAccountAgedPayableCustomize(models.Model):
             currency_table=self.env['res.currency']._get_query_currency_table(options),
             period_table=self._get_query_period_table(options),
         )
+        # HAVING ROUND(account_move_line.amount_currency + COALESCE(SUM(part_credit.amount_currency), 0)) != 0
         params = {
             'account_type': options['filter_account_type'],
             'sign': 1 if options['filter_account_type'] == 'receivable' else -1,
