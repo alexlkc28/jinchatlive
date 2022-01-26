@@ -21,7 +21,7 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
     part_debit_amount = fields.Monetary(currency_field='currency_id')
     part_credit_amount = fields.Monetary(currency_field='currency_id')
 
-    amount_check = fields.Float('Amount Check')
+    amount_check = fields.Float()
 
     @api.model
     def _get_sql(self):
@@ -135,7 +135,7 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
             self._field_column('period3', sortable=True),
             self._field_column('period4', sortable=True),
             self._field_column('period5', sortable=True),
-            self._field_column('amount_check'),
+            self._field_column('amount_check', name=_("Check")),
             self._custom_column(  # Avoid doing twice the sub-select in the view
                 name=_('Total'),
                 classes=['number'],
