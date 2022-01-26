@@ -21,6 +21,8 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
     part_debit_amount = fields.Monetary(currency_field='currency_id')
     part_credit_amount = fields.Monetary(currency_field='currency_id')
 
+    amount_check = fields.Float('Amount Check')
+
     @api.model
     def _get_sql(self):
         options = self.env.context['report_options']
@@ -44,6 +46,8 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
                     
                     COALESCE(SUM(part_debit.amount), 0) AS part_debit_amount,
                     COALESCE(SUM(part_credit.amount), 0) AS part_credit_amount,
+                    
+                    ROUND(account_move_line.balance - COALESCE(SUM(part_debit.amount), 0) + COALESCE(SUM(part_credit.amount), 0), currency_table.precision) AS amount_check,
                     
                     COALESCE(so.name, move.ref) AS order_no,
                     curr_rate.rate AS currency_rate,
@@ -131,6 +135,7 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
             self._field_column('period3', sortable=True),
             self._field_column('period4', sortable=True),
             self._field_column('period5', sortable=True),
+            self._field_column('amount_check'),
             self._custom_column(  # Avoid doing twice the sub-select in the view
                 name=_('Total'),
                 classes=['number'],
@@ -194,6 +199,8 @@ class ReportAccountAgedPayableCustomize(models.Model):
 
                         COALESCE(SUM(part_debit.amount), 0) AS part_debit_amount,
                         COALESCE(SUM(part_credit.amount), 0) AS part_credit_amount,
+                        
+                        ROUND(account_move_line.balance - COALESCE(SUM(part_debit.amount), 0) + COALESCE(SUM(part_credit.amount), 0), currency_table.precision) AS amount_check,
                         
                         COALESCE(so.name, move.ref) AS order_no,
                         curr_rate.rate AS currency_rate,
