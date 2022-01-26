@@ -200,7 +200,7 @@ class ReportAccountAgedPayableCustomize(models.Model):
                         COALESCE(SUM(part_debit.amount), 0) AS part_debit_amount,
                         COALESCE(SUM(part_credit.amount), 0) AS part_credit_amount,
                         
-                        ROUND(account_move_line.balance - COALESCE(SUM(part_debit.amount), 0) + COALESCE(SUM(part_credit.amount), 0), currency_table.precision) AS amount_check,
+                        ROUND(account_move_line.balance - COALESCE(SUM(part_debit.amount), 0) + COALESCE(SUM(part_credit.amount), 0), 0) AS amount_check,
                         
                         COALESCE(so.name, move.ref) AS order_no,
                         curr_rate.rate AS currency_rate,
