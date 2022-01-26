@@ -17,9 +17,9 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
     amount_paid = fields.Monetary(currency_field='currency_id')
     amount_residual = fields.Monetary(currency_field='currency_id')
 
-    balance = fields.Monetary(currency_field='currency_id')
-    part_debit_amount = fields.Monetary(currency_field='currency_id')
-    part_credit_amount = fields.Monetary(currency_field='currency_id')
+    balance = fields.Monetary()
+    part_debit_amount = fields.Monetary()
+    part_credit_amount = fields.Monetary()
     amount_check = fields.Float()
 
     @api.model
@@ -200,8 +200,8 @@ class ReportAccountAgedPayableCustomize(models.Model):
                         COALESCE(SUM(part_credit.amount_currency), 0) AS amount_paid,
                         (account_move_line.amount_currency + COALESCE(SUM(part_credit.amount_currency), 0)) AS amount_residual,
 
-                        COALESCE(SUM(part_debit.amount), 0) AS part_debit_amount,
-                        COALESCE(SUM(part_credit.amount), 0) AS part_credit_amount,
+                        COALESCE(SUM(part_debit.amount_currency), 0) AS part_debit_amount,
+                        COALESCE(SUM(part_credit.amount_currency), 0) AS part_credit_amount,
                         
                         ROUND(account_move_line.balance - COALESCE(SUM(part_debit.amount), 0) + COALESCE(SUM(part_credit.amount), 0), 0) AS amount_check,
                         
@@ -268,7 +268,9 @@ class ReportAccountAgedPayableCustomize(models.Model):
             currency_table=self.env['res.currency']._get_query_currency_table(options),
             period_table=self._get_query_period_table(options),
         )
+        # HAVING ROUND(account_move_line.balance - COALESCE(SUM(part_debit.amount), 0) + COALESCE(SUM(part_credit.amount), 0), 0) != 0
         # HAVING ROUND(account_move_line.amount_currency + COALESCE(SUM(part_credit.amount_currency), 0)) != 0
+        # HAVING ROUND(account_move_line.amount_currency - COALESCE(SUM(part_debit.amount_currency), 0) + COALESCE(SUM(part_credit.amount_currency), 0), 0) != 0
         params = {
             'account_type': options['filter_account_type'],
             'sign': 1 if options['filter_account_type'] == 'receivable' else -1,
