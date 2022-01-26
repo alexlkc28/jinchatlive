@@ -124,10 +124,10 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
             self._header_column(),
             self._field_column('report_date'),
 
-            self._field_column('balance', name=_("balance")),
-            self._field_column('part_debit_amount', name=_("part_debit_amount")),
-            self._field_column('part_credit_amount', name=_("part_credit_amount")),
-            self._field_column('amount_check', name=_("amount_check")),
+            # self._field_column('balance', name=_("balance")),
+            # self._field_column('part_debit_amount', name=_("part_debit_amount")),
+            # self._field_column('part_credit_amount', name=_("part_credit_amount")),
+            # self._field_column('amount_check', name=_("amount_check")),
 
             self._field_column('account_name', name=_("Account")),
             self._field_column('order_no', name=_("Order No.")),
@@ -151,11 +151,6 @@ class ReportAccountAgedPartnerCustomize(models.AbstractModel):
 
         if self.user_has_groups('base.group_multi_currency'):
             columns[2:2] = [
-                # Log
-                # self._field_column('part_debit_amount', name="Debit"),
-                # self._field_column('part_credit_amount', name="Credit"),
-                # self._field_column('balance', name="Balance"),
-
                 self._field_column('amount_residual', name=_("Balance in original currency Amount")),
                 self._field_column('amount_currency', name=_("Original Invoice Amount")),
 
