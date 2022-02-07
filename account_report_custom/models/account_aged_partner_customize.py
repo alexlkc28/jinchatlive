@@ -208,7 +208,7 @@ class ReportAccountAgedPayableCustomize(models.Model):
                         CASE WHEN period_table.period_index = {i}
                         THEN %(sign)s * ROUND((
                             CASE WHEN curr_rate.rate > 0
-                            THEN (account_move_line.amount_currency/curr_rate.rate - COALESCE(SUM(part_debit.amount), 0) + COALESCE(SUM(part_credit.amount), 0))
+                            THEN (account_move_line.amount_currency - COALESCE(SUM(part_debit.amount_currency), 0) + COALESCE(SUM(part_credit.amount_currency), 0)) / curr_rate.rate
                             ELSE (account_move_line.balance - COALESCE(SUM(part_debit.amount), 0) + COALESCE(SUM(part_credit.amount), 0))
                             END
                         ) * currency_table.rate, currency_table.precision)
