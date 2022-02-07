@@ -88,7 +88,7 @@ class ReportSaleOrderUndelivered(models.Model):
                 ELSE sale_order_line.price_total END AS amount,
                 
                 (sale_order_line.product_uom_qty - sale_order_line.qty_delivered) AS outstanding_quantity,
-                (sale_order_line.product_uom_qty - sale_order_line.qty_delivered) * sale_order_line.price_unit AS outstanding_currency,
+                (sale_order_line.product_uom_qty - sale_order_line.qty_delivered) * ((100 - sale_order_line.discount) / 100 * sale_order_line.price_unit) AS outstanding_currency,
                 
                 CASE WHEN curr_rate.rate > 0
                 THEN (sale_order_line.product_uom_qty - sale_order_line.qty_delivered) * sale_order_line.price_unit / curr_rate.rate
